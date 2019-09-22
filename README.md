@@ -1,4 +1,5 @@
 # k8-iNet
+Kubernetes setup for iNet
 
 ## After creating from template
 sudo hostnamectl set-hostname <correct host name><BR>
