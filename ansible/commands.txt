@@ -1,0 +1,7 @@
+Remember to edit hosts and the hosts line in each yaml file.
+
+Run in this order:
+ansible-playbook -i hosts initial.yml --extra-vars "ansible_sudo_pass=roni82"
+ansible-playbook -i hosts dependencies.yml
+ansible-playbook -i hosts master.yml
+ansible-playbook -i hosts join.yml 

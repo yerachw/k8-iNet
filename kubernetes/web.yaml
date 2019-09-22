@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: web
+  sessionAffinity: ClientIP
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - env:
+        - name: VERSION
+          value: 1.0.25
+        envFrom:
+        - configMapRef:
+            name: envars
+        - secretRef:
+            name: secrets
+        image: yerachw/inet-web:latest
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 60
+          periodSeconds: 60
+        name: web
+        ports:
+        - containerPort: 5000
+      imagePullSecrets:
+      - name: regcred
+      nodeSelector:
+        target: web

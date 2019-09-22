@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: mysql
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.6
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: DBROOT
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: envars
+              key: DBNAME
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: DBUSER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: DBPASSWD
+        # resources:
+        #   requests:
+        #     memory: "3500Mi"
+        #     cpu: "1"
+      #   volumeMounts:
+      #   - name: mysql-persistent-storage
+      #     mountPath: /var/lib/mysql
+      # volumes:
+      # - name: mysql-persistent-storage
+      #   persistentVolumeClaim:
+      #       claimName: mysql-data      
+      # #   awsElasticBlockStore:
+      # #     volumeID: vol-09b7ff1f5f5e2f26b
+      nodeSelector:
+        target: mysql
+
+# Despite the  doc this did not seem to create the user and has_staging DB.
+# Maybe it was already initialized by me playing around
+# In any event this can be created manually:
+#   CREATE USER 'content'@'%' IDENTIFIED BY 'cont#nt613';
+#   GRANT ALL PRIVILEGES ON has_staging.* TO 'content'@'%';
+# (Maybe we need localhost as well as % - i.e run each command twice)
+# Anyway we will need to drop has_staging if migration is to work
