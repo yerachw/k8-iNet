@@ -6,7 +6,6 @@ vi 50-cloud-init.yaml - setting the correct ip address<BR>
 sudo cp 50-cloud-init.yaml /etc/netplan<BR>
 sudo netplan apply<BR>
 
-
 ## IP assign to digivault:
 27.111.33.0/28<BR>
 Gateway: 27.111.33.1<BR>
