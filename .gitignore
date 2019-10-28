@@ -1,3 +1,4 @@
 ansible/
 kubernetes/storageos-secret.yaml
+notes.md
 storageos/
