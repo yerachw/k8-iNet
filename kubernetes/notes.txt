@@ -1,0 +1,5 @@
+Install redis staging
+    helm install --name redis -f kubernetes/redis-staging-values.yaml stable/redis
+
+Delete redis completely
+    helm del --purge redis
