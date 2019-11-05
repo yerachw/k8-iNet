@@ -1,5 +1,13 @@
-Install redis staging
-    helm install --name redis -f kubernetes/redis-staging-values.yaml stable/redis
 
+Open dashboard
+    http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#!/login
+
+Install redis staging
+    helm install --name redis -f kubernetes/redisha-staging-values.yaml  stable/redis-ha
+    
 Delete redis completely
     helm del --purge redis
+
+
+Correct example for adding SSL certificate:
+https://github.com/kubernetes-retired/contrib/tree/master/ingress/controllers/nginx/examples/tls
