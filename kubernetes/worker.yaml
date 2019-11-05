@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - env:
+        - name: VERSION
+          value: 1.0.18
+        envFrom:
+        - configMapRef:
+            name: envars
+        - secretRef:
+            name: secrets
+        image: yerachw/inet-worker:latest
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - celery -A common.tasks.create_celery.celery status | grep -q OK
+          initialDelaySeconds: 60
+          periodSeconds: 60
+        name: worker
+        resources:
+          limits:
+            cpu: 3000m
+            memory: 16Gi
+          requests:
+            cpu: 3000m
+            memory: 12Gi
+      imagePullSecrets:
+      - name: regcred
