@@ -62,4 +62,12 @@ sudo systemctl restart nginx
 
 sudo apt install logstash
 
-curl -X PUT -H 'Content-Type: application/json' http://localhost:9200/myfirstindex/_doc/1 -d '{"name":"james", "country":"south africa", "gender": "male"}'
+
+Test the stack
+--------------
+curl -XPUT http://elastic-staging.dvaultsol.com:9200/myfirstindex
+curl -X PUT -H 'Content-Type: application/json' http://elastic-staging.dvaultsol.com:9200/myfirstindex/_doc/1 -d '{"name":"james", "country":"south africa", "gender": "male"}'
+curl -XGET http://elastic-staging.dvaultsol.com:9200/myfirstindex/_doc/1?pretty
+curl -XPOST -H 'Content-Type: application/json' http://elastic-staging.dvaultsol.com:9200/myfirstindex/_doc/2 -d '{"name": "kevin", "country": "new zealand", "gender": "male"}'
+curl -XPOST -H 'Content-Type: application/json' http://elastic-staging.dvaultsol.com:9200/myfirstindex/_doc/3 -d '{"name": "sarah", "country": "ireland", "gender": "female"}'
+curl -XGET http://elastic-staging.dvaultsol.com:9200/_cat/indices?v
