@@ -7,4 +7,4 @@ if [ $# -lt 2  ]; then
     exit 1
 fi
 
-tar cz "${@:2}" | gpg -c -o $1
+tar c "${@:2}" | gpg -c -o $1
